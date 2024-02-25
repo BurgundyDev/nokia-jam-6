@@ -43,5 +43,7 @@ target_include_directories(nokia-jam-six PUBLIC include)
 target_link_libraries(${PROJECT_NAME} raylib)
 
 set_property(TARGET nokia-jam-six PROPERTY CXX_STANDARD 20)
-
+add_custom_command(TARGET nokia-jam-six POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:nokia-jam-six>/resources)
 # TODO: Add tests and install targets if needed.
