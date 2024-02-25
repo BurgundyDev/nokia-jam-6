@@ -32,6 +32,27 @@ int main()
         if (currentColorScheme >= 3) currentColorScheme = 0;
         else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
+#ifdef NJ_DEBUG
+        if(IsKeyPressed(KEY_ONE))
+        {
+            currentGameState = GAME_STATE::MENU;
+        }
+        else if(IsKeyPressed(KEY_TWO))
+        {
+            currentGameState = GAME_STATE::GAME;
+            player.Reset();
+            witch.Reset();
+        }
+        else if(IsKeyPressed(KEY_THREE))
+        {
+            currentGameState = GAME_STATE::LOSE;
+        }
+        else if(IsKeyPressed(KEY_FOUR))
+        {
+            currentGameState = GAME_STATE::WIN;
+        }
+#endif
+
         if(TimerDone(timer))
         {
             witch.TurnAround();

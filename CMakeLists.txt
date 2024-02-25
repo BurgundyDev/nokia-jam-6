@@ -44,4 +44,11 @@ set_property(TARGET nokia-jam-six PROPERTY CXX_STANDARD 20)
 add_custom_command(TARGET nokia-jam-six POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/resources)
-# TODO: Add tests and install targets if needed.
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(NJ_DEBUG)
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_compile_definitions(NJ_RELEASE)
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    add_compile_definitions(NJ_RELEASE)
+endif()
