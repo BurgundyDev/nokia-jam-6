@@ -8,7 +8,16 @@
 #define GLSL_VERSION            100
 #endif
 
+enum class GAME_STATE
+{
+    MENU = 0,
+    GAME = 1,
+    LOSE = 2,
+    WIN = 3,
+    CREDITS = 4
+};
 
+inline GAME_STATE currentGameState;
 
 inline std::vector<Color> const DARK_COLORS = {
     { 67, 82, 61,255 },

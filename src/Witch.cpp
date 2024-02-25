@@ -18,6 +18,11 @@ bool Witch::CheckState() const
     return m_IsLooking;
 }
 
+void Witch::Reset()
+{
+    m_IsLooking = false;
+}
+
 void Witch::Draw()
 {
     if(m_IsLooking)

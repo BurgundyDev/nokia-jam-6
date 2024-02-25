@@ -22,6 +22,7 @@ public:
     void Draw();
     void Update(bool was_witch_looking);
     bool CheckLoss();
+    void Reset();
 
 
 private:
