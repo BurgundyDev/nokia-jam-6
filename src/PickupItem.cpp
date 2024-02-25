@@ -6,7 +6,7 @@ PickupItem::PickupItem(const Vector2& pos)
 {
     Image temp = LoadImage("resources/images/enviro/candy.png");
 #ifndef NOKIA_BUILD
-    ImageResizeNN(&temp, 60, 60);
+    ImageResizeNN(&temp, 50, 50);
 #endif
     m_Texture = LoadTextureFromImage(temp);
     m_Position = pos;
