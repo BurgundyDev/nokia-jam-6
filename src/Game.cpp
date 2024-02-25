@@ -135,8 +135,8 @@ void Game::Run()
                 m_Player->Update(m_Witch->CheckState());
                     bool player_touches_candy = {
                         m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x &&
-                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 5*CELL_SIZE &&
-                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 5*CELL_SIZE &&
+                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 6*CELL_SIZE &&
+                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 6*CELL_SIZE &&
                         m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y
                     };
                     if(player_touches_candy && !m_PickedCandies.contains(m_Candies[m_CurrentStage]))
@@ -182,6 +182,10 @@ void Game::Run()
                 m_PickedCandies.clear();
                 m_CurrentStage = 0;
             }
+            if(IsKeyPressed(KEY_M))
+                m_CurrState = GAME_STATE::MENU;
+            if(IsKeyPressed(KEY_C))
+                m_CurrState = GAME_STATE::CREDITS;
             break;
         case GAME_STATE::CREDITS:
             DrawTextureEx(creditsTexture, {0, 0}, 0, CELL_SIZE, WHITE);
