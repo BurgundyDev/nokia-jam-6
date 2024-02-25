@@ -32,13 +32,14 @@ void Game::Run()
         LoadShader(nullptr, "resources/shaders/pp_gray.glsl")
     };
 
-    Font const primaryFont_32 = LoadFontEx("resources/fonts/Zepto-Regular.ttf", 32, nullptr, 0);
-    Font const primaryFont_64 = LoadFontEx("resources/fonts/Zepto-Regular.ttf", 64, nullptr, 0);
-    Font const secondaryFont_32 = LoadFontEx("resources/fonts/tiny.ttf", 32, nullptr, 0);
-    Font const secondaryFont_64 = LoadFontEx("resources/fonts/tiny.ttf", 64, nullptr, 0);
-    Font const titleFont_32 = LoadFontEx("resources/fonts/EffortsPro.ttf", 32, nullptr, 0);
-    Font const titleFont_64 = LoadFontEx("resources/fonts/EffortsPro.ttf", 64, nullptr, 0);
-
+    Image const menuImage = LoadImage("resources/images/main_screen.png");
+    Texture2D const menuTexture = LoadTextureFromImage(menuImage);
+    Image const winImage = LoadImage("resources/images/win_screen.png");
+    Texture2D const winTexture = LoadTextureFromImage(winImage);
+    Image const loseImage = LoadImage("resources/images/lose_screen.png");
+    Texture2D const loseTexture = LoadTextureFromImage(loseImage);
+    Image const creditsImage = LoadImage("resources/images/credits_screen.png");
+    Texture2D const creditsTexture = LoadTextureFromImage(creditsImage);
 
     while(!WindowShouldClose())
     {
@@ -55,10 +56,14 @@ void Game::Run()
         switch (m_CurrState)
         {
             case GAME_STATE::MENU:
-                DrawTextEx(primaryFont_32, "Press Enter to start", Vector2(10, 10), 32, 1, DARK_COLORS[currentColorScheme]);
-                if (IsKeyPressed(KEY_ENTER))
+                DrawTextureEx(menuTexture, {0, 0}, 0, CELL_SIZE, WHITE);
+                if (IsKeyPressed(KEY_V))
                 {
                     m_CurrState = GAME_STATE::GAME;
+                }
+                else if (IsKeyPressed(KEY_C))
+                {
+                    m_CurrState = GAME_STATE::CREDITS;
                 }
                 break;
             case GAME_STATE::GAME:
@@ -69,31 +74,31 @@ void Game::Run()
                     if (currentColorScheme >= 3) currentColorScheme = 0;
                     else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
-            if(TimerDone(m_Timer))
-            {
-                m_Witch->TurnAround();
-                SetTimer(m_Timer, (float)GetRandomValue(3, 10));
-            }
-            if(m_Player->IsTop() && m_CurrentStage < 2)
-            {
-                m_Window->StageUp();
-                m_Player->SetTop(false);
-                ++m_CurrentStage;
-                m_Player->SetPosition(m_Player->GetPosition().x, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
+                if(TimerDone(m_Timer))
+                {
+                    m_Witch->TurnAround();
+                    SetTimer(m_Timer, (float)GetRandomValue(3, 10));
+                }
+                if(m_Player->IsTop() && m_CurrentStage < 2)
+                {
+                    m_Window->StageUp();
+                    m_Player->SetTop(false);
+                    ++m_CurrentStage;
+                    m_Player->SetPosition(m_Player->GetPosition().x, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
 
-            }
-            if(m_Player->IsBottom() && m_CurrentStage > 0)
-            {
-                m_Window->StageDown();
-                m_Player->SetBottom(false);
-                --m_CurrentStage;
-                m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
-            };
-            m_Player->Update(m_Witch->CheckState());
-            UpdateTimer(m_Timer);
-            m_Player->Draw();
-            m_Witch->Draw();
-            DrawText(TextFormat("Current Stage: %i", m_CurrentStage), 120, 300, 25, DARK_COLORS[currentColorScheme]);
+                }
+                if(m_Player->IsBottom() && m_CurrentStage > 0)
+                {
+                    m_Window->StageDown();
+                    m_Player->SetBottom(false);
+                    --m_CurrentStage;
+                    m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
+                };
+                m_Player->Update(m_Witch->CheckState());
+                UpdateTimer(m_Timer);
+                m_Player->Draw();
+                m_Witch->Draw();
+                DrawText(TextFormat("Current Stage: %i", m_CurrentStage), 120, 300, 25, DARK_COLORS[currentColorScheme]);
         }
         else
         {
