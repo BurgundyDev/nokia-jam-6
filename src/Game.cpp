@@ -49,6 +49,14 @@ void Game::Run()
         LoadShader(nullptr, "resources/shaders/pp_gray.glsl")
     };
 
+    Image const menuImage = LoadImage("resources/images/main_screen.png");
+    Texture2D const menuTexture = LoadTextureFromImage(menuImage);
+    Image const winImage = LoadImage("resources/images/win_screen.png");
+    Texture2D const winTexture = LoadTextureFromImage(winImage);
+    Image const loseImage = LoadImage("resources/images/lose_screen.png");
+    Texture2D const loseTexture = LoadTextureFromImage(loseImage);
+    Image const creditsImage = LoadImage("resources/images/credits_screen.png");
+    Texture2D const creditsTexture = LoadTextureFromImage(creditsImage);
 
     while(!WindowShouldClose())
     {
@@ -63,35 +71,51 @@ void Game::Run()
         ClearBackground(LIGHT_COLORS[currentColorScheme]);
 
         switch (m_CurrState)
-    {
-    case GAME_STATE::MENU:
-        DrawText("Press Enter to start", 10, 10, 20, DARK_COLORS[currentColorScheme]);
-        if (IsKeyPressed(KEY_ENTER))
         {
-            m_CurrState = GAME_STATE::GAME;
-        }
-        break;
-    case GAME_STATE::GAME:
+            case GAME_STATE::MENU:
+                DrawTextureEx(menuTexture, {0, 0}, 0, CELL_SIZE, WHITE);
+                if (IsKeyPressed(KEY_V))
+                {
+                    m_CurrState = GAME_STATE::GAME;
+                }
+                else if (IsKeyPressed(KEY_C))
+                {
+                    m_CurrState = GAME_STATE::CREDITS;
+                }
+                break;
+            case GAME_STATE::GAME:
+                if (!m_Player->CheckLoss())
+                {
+                    if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentColorScheme++;
+                    else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentColorScheme--;
+                    if (currentColorScheme >= 3) currentColorScheme = 0;
+                    else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
-        if (!m_Player->CheckLoss())
-        {
-            if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentColorScheme++;
-            else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentColorScheme--;
-            if (currentColorScheme >= 3) currentColorScheme = 0;
-            else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
+                if(TimerDone(m_Timer))
+                {
+                    m_Witch->TurnAround();
+                    SetTimer(m_Timer, (float)GetRandomValue(3, 10));
+                }
+                if(m_Player->IsTop() && m_CurrentStage < 2)
+                {
+                    m_Window->StageUp();
+                    m_Player->SetTop(false);
+                    ++m_CurrentStage;
+                    m_Player->SetPosition(m_Player->GetPosition().x, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
 
-            if(TimerDone(m_Timer))
-            {
-                m_Witch->TurnAround();
-                SetTimer(m_Timer, (float)GetRandomValue(3, 10));
-            }
-            if(m_Player->IsTop() && m_CurrentStage < 2)
-            {
-                m_Window->StageUp();
-                m_Player->SetTop(false);
-                ++m_CurrentStage;
-                m_Player->SetPosition(m_Player->GetPosition().x, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
-
+                }
+                if(m_Player->IsBottom() && m_CurrentStage > 0)
+                {
+                    m_Window->StageDown();
+                    m_Player->SetBottom(false);
+                    --m_CurrentStage;
+                    m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
+                };
+                m_Player->Update(m_Witch->CheckState());
+                UpdateTimer(m_Timer);
+                m_Player->Draw();
+                m_Witch->Draw();
+                DrawText(TextFormat("Current Stage: %i", m_CurrentStage), 120, 300, 25, DARK_COLORS[currentColorScheme]);
             }
             if(m_Player->IsBottom() && m_CurrentStage > 0)
             {
