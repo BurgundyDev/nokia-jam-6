@@ -111,12 +111,20 @@ void Game::Run()
                     else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentColorScheme--;
                     if (currentColorScheme >= 3) currentColorScheme = 0;
                     else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
-
-                if(TimerDone(m_Timer))
+                if(TimerDone(m_Timer) && m_WitchWasLookingLastFrame)
                 {
                     m_Witch->TurnAround();
                     SetTimer(m_Timer, (float)GetRandomValue(3, 10));
+                    m_WitchWasLookingLastFrame = false;
+                    m_AnimationFrameCounter = 0;
                 }
+                else if(TimerDone(m_Timer) && !m_WitchWasLookingLastFrame)
+                {
+                    ++m_AnimationFrameCounter;
+                    if(m_AnimationFrameCounter == 5)
+                        m_WitchWasLookingLastFrame = true;
+                }
+
                 if(m_Player->IsTop() && m_CurrentStage < 2)
                 {
                     m_Window->StageUp();
@@ -147,7 +155,10 @@ void Game::Run()
 
                     UpdateTimer(m_Timer);
                     m_Player->Draw();
-                    m_Witch->Draw();
+                    if(!m_WitchWasLookingLastFrame)
+                        m_Witch->Draw();
+                    else
+                        m_Witch->Animate();
 
                     if(!m_PickedCandies.contains(m_Candies[m_CurrentStage]))
                         m_Candies[m_CurrentStage]->Draw();

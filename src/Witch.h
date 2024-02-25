@@ -16,6 +16,7 @@ public:
     bool CheckState() const;
     void Draw();
     void Reset();
+    void Animate();
 
 private:
     bool m_IsLooking;

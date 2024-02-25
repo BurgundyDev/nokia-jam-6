@@ -39,6 +39,9 @@ private:
     std::vector<PickupItem*> m_Candies;
     std::vector<Vector2> m_CandiesPositions;
 
+    bool m_WitchWasLookingLastFrame = false;
+    int m_AnimationFrameCounter = 0;
+
 };
 
 
