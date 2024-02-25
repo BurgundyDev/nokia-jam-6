@@ -4,9 +4,11 @@
 
 #include "PickupItem.h"
 #include "Player.h"
+#include "Timer.h"
 #include "Witch.h"
 
 // real nokia has 320x240px
+
 
 
 
@@ -25,6 +27,8 @@ int main()
     SetTargetFPS(10);
     Witch witch = Witch();
     int hack_counter = 0;
+    Timer* timer = new Timer();
+    SetTimer(timer, (float)GetRandomValue(1, 10));
     while (!WindowShouldClose())
     {
         if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentColorScheme++;
@@ -32,18 +36,27 @@ int main()
         if (currentColorScheme >= 3) currentColorScheme = 0;
         else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
-        if(hack_counter == 50)
+        if(TimerDone(timer))
         {
             witch.TurnAround();
-            hack_counter = 0;
+            SetTimer(timer, (float)GetRandomValue(3, 10));
         }
         BeginDrawing();
             BeginShaderMode(shaders[currentColorScheme]);
                 ClearBackground(LIGHT_COLORS[currentColorScheme]);
-                player.Update(witch.CheckState());
-                player.Draw();
-                pi.Draw();
-                witch.Draw();
+                if(!player.CheckLoss())
+                {
+                    player.Update(witch.CheckState());
+                    UpdateTimer(timer);
+                    player.Draw();
+                    pi.Draw();
+                    witch.Draw();
+                }
+                else
+                {
+                    DrawText("You died lol", 100, 100, 15, RAYWHITE);
+                }
+
             EndShaderMode();
         EndDrawing();
         ++hack_counter;

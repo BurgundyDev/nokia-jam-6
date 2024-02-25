@@ -37,6 +37,7 @@ add_executable (nokia-jam-six
         src/Player.h
         src/Witch.cpp
         src/Witch.h
+        src/Timer.h
 )
 target_sources(nokia-jam-six PRIVATE "src/nokia-jam-six.cpp")
 target_include_directories(nokia-jam-six PUBLIC include)
