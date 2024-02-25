@@ -217,3 +217,27 @@ void Game::Draw()
 void Game::Setup()
 {
 }
+
+void Game::Reset()
+{
+    m_Player->Reset();
+    m_Witch->Reset();
+    m_CurrentStage = 0;
+    m_PlayerIsBottom = false;
+    m_PlayerIsTop = false;
+    Vector2 temp1 = {(float)GetRandomValue(2*CELL_SIZE, 38*CELL_SIZE),
+        (float)GetRandomValue(21* CELL_SIZE, 80 * CELL_SIZE)};
+    Vector2 temp2 = {(float)GetRandomValue(2*CELL_SIZE, 38*CELL_SIZE),
+        (float)GetRandomValue(21* CELL_SIZE, 80 * CELL_SIZE)};
+    Vector2 temp3 = {(float)GetRandomValue(2*CELL_SIZE, 38*CELL_SIZE),
+        (float)GetRandomValue(21* CELL_SIZE, 80 * CELL_SIZE)};
+    StageLayout* first_stage = new StageLayout(temp1);
+    StageLayout* second_stage = new StageLayout(temp2);
+    StageLayout* third_stage = new StageLayout(temp3);
+    m_Window->RegisterStates(first_stage, second_stage, third_stage);
+    m_Candies = { new PickupItem(first_stage->CandyPosition),
+                  new PickupItem(second_stage->CandyPosition),
+                  new PickupItem(third_stage->CandyPosition) };
+    m_PickedCandies = {};
+    m_CandiesPositions = { temp1, temp2, temp3 };
+}
