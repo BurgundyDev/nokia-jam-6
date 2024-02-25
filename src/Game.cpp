@@ -23,12 +23,12 @@ Game::Game() : m_CurrState(GAME_STATE::MENU)
     m_CurrentStage = 0;
 
 
-    Vector2 temp1 = {(float)GetRandomValue(2*CELL_SIZE, 18*CELL_SIZE),
+    Vector2 temp1 = {(float)GetRandomValue(2*CELL_SIZE, 38*CELL_SIZE),
         (float)GetRandomValue(21* CELL_SIZE, 80 * CELL_SIZE)};
-    Vector2 temp2 = {(float)GetRandomValue(2*CELL_SIZE, 18*CELL_SIZE),
-        (float)GetRandomValue(21* CELL_SIZE, 83 * CELL_SIZE)};
-    Vector2 temp3 = {(float)GetRandomValue(2*CELL_SIZE, 18*CELL_SIZE),
-        (float)GetRandomValue(21* CELL_SIZE, 83 * CELL_SIZE)};
+    Vector2 temp2 = {(float)GetRandomValue(2*CELL_SIZE, 38*CELL_SIZE),
+        (float)GetRandomValue(21* CELL_SIZE, 80 * CELL_SIZE)};
+    Vector2 temp3 = {(float)GetRandomValue(2*CELL_SIZE, 38*CELL_SIZE),
+        (float)GetRandomValue(21* CELL_SIZE, 80 * CELL_SIZE)};
     StageLayout* first_stage = new StageLayout(temp1);
     StageLayout* second_stage = new StageLayout(temp2);
     StageLayout* third_stage = new StageLayout(temp3);
@@ -121,7 +121,7 @@ void Game::Run()
                 else if(TimerDone(m_Timer) && !m_WitchWasLookingLastFrame)
                 {
                     ++m_AnimationFrameCounter;
-                    if(m_AnimationFrameCounter == 5)
+                    if(m_AnimationFrameCounter == 16)
                         m_WitchWasLookingLastFrame = true;
                 }
 
@@ -143,8 +143,8 @@ void Game::Run()
                 m_Player->Update(m_Witch->CheckState());
                     bool player_touches_candy = {
                         m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x &&
-                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 6*CELL_SIZE &&
-                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 6*CELL_SIZE &&
+                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 5*CELL_SIZE &&
+                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 8*CELL_SIZE &&
                         m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y
                     };
                     if(player_touches_candy && !m_PickedCandies.contains(m_Candies[m_CurrentStage]))
@@ -155,7 +155,7 @@ void Game::Run()
 
                     UpdateTimer(m_Timer);
                     m_Player->Draw();
-                    if(!m_WitchWasLookingLastFrame)
+                    if(m_AnimationFrameCounter <= 0 || m_AnimationFrameCounter > 200)
                         m_Witch->Draw();
                     else
                         m_Witch->Animate();
@@ -181,6 +181,7 @@ void Game::Run()
                 m_Witch->Reset();
                 m_PickedCandies.clear();
                 m_CurrentStage = 0;
+                Reset();
             }
             break;
         case GAME_STATE::WIN:
@@ -192,6 +193,7 @@ void Game::Run()
                 m_Witch->Reset();
                 m_PickedCandies.clear();
                 m_CurrentStage = 0;
+                Reset();
             }
             if(IsKeyPressed(KEY_M))
                 m_CurrState = GAME_STATE::MENU;
