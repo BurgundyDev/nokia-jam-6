@@ -11,7 +11,8 @@ int main()
 {
     currentGameState = GAME_STATE::MENU;
     InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "codename frost");
-
+    Font NJ_Font_32 = LoadFontEx("resources/Zepto-Regular.ttf", 32, nullptr, 0);
+    Font NJ_Font_64 = LoadFontEx("resources/Zepto-Regular.ttf", 32, nullptr, 0);
     std::vector<Shader> const shaders = {
         LoadShader(nullptr, "resources/shaders/pp_original.glsl"),
         LoadShader(nullptr, "resources/shaders/pp_harsh.glsl"),
@@ -65,7 +66,7 @@ int main()
         switch (currentGameState)
         {
             case GAME_STATE::MENU:
-                DrawText("Press Enter to start", 10, 10, 20, DARK_COLORS[currentColorScheme]);
+                DrawTextEx(NJ_Font_32, "Press Enter to start", Vector2(10, 10), 32, 1, DARK_COLORS[currentColorScheme]);
                 if (IsKeyPressed(KEY_ENTER))
                 {
                     currentGameState = GAME_STATE::GAME;
@@ -86,7 +87,7 @@ int main()
                 }
                 break;
             case GAME_STATE::LOSE:
-                DrawText("You lost! Press Enter to restart", 10, 10, 20, DARK_COLORS[currentColorScheme]);
+                DrawTextEx(NJ_Font_32, "You lost! Press Enter to restart", Vector2(10, 10), 32, 1, DARK_COLORS[currentColorScheme]);
                 if (IsKeyPressed(KEY_ENTER))
                 {
                     currentGameState = GAME_STATE::GAME;
@@ -95,7 +96,7 @@ int main()
                 }
                 break;
             case GAME_STATE::WIN:
-                DrawText("You won! Press Enter to restart", 10, 10, 20, DARK_COLORS[currentColorScheme]);
+                DrawTextEx(NJ_Font_32, "You won! Press Enter to restart", Vector2(10, 10), 32, 1, DARK_COLORS[currentColorScheme]);
                 if (IsKeyPressed(KEY_ENTER))
                 {
                     currentGameState = GAME_STATE::GAME;
