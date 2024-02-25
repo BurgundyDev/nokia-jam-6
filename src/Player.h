@@ -30,7 +30,7 @@ private:
     std::array<Image, 2> m_Images;
     std::array<Texture2D, 3> m_Textures;
     PlayerAlignment m_CurrAlignment;
-    bool m_Lost;
+    bool m_Lost = false;
 
 };
 
