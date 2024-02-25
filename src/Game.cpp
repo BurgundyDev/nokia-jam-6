@@ -4,9 +4,7 @@
 
 #include "Game.h"
 
-#include <iosfwd>
 #include <nokia-jam-six.h>
-#include <sstream>
 
 Game::Game() : m_CurrState(GAME_STATE::MENU)
 {
@@ -86,10 +84,7 @@ void Game::Run()
             UpdateTimer(m_Timer);
             m_Player->Draw();
             m_Witch->Draw();
-            std::stringstream ss;
-            ss << "Current Stage: ";
-            ss << m_CurrentStage;
-            DrawText(ss.str().c_str(), 120, 300, 25, DARK_COLORS[currentColorScheme]);
+            DrawText(TextFormat("Current Stage: %i", m_CurrentStage), 120, 300, 25, DARK_COLORS[currentColorScheme]);
         }
         else
         {
@@ -102,7 +97,7 @@ void Game::Run()
         {
             m_CurrState = GAME_STATE::GAME;
             m_Player->Reset();
-            m_Player->Reset();
+            m_Witch->Reset();
         }
         break;
     case GAME_STATE::WIN:
