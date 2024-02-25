@@ -130,24 +130,39 @@ void Game::Run()
         DrawTextureEx(loseTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
         if (IsKeyPressed(KEY_R))
         {
-            m_CurrState = GAME_STATE::GAME;
             m_Player->Reset();
             m_Witch->Reset();
+            m_CurrState = GAME_STATE::GAME;
+            
+        }
+        if (IsKeyPressed(KEY_M))
+        {
+            m_Player->Reset();
+            m_Witch->Reset();
+            m_CurrState = GAME_STATE::MENU;
         }
         break;
     case GAME_STATE::WIN:
-        DrawTextureEx(creditsTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
-        if (IsKeyPressed(KEY_R))
+        DrawTextureEx(winTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
+        if (IsKeyPressed(KEY_M))
         {
-            m_CurrState = GAME_STATE::GAME;
             m_Player->Reset();
             m_Witch->Reset();
+            m_CurrState = GAME_STATE::MENU;
+        }
+        if (IsKeyPressed(KEY_C))
+        {
+            m_Player->Reset();
+            m_Witch->Reset();
+            m_CurrState = GAME_STATE::CREDITS;
         }
         break;
     case GAME_STATE::CREDITS:
         DrawTextureEx(creditsTexture, {0, 0}, 0, CELL_SIZE, WHITE);
         if (IsKeyPressed(KEY_M))
         {
+            m_Player->Reset();
+            m_Witch->Reset();
             m_CurrState = GAME_STATE::MENU;
         }
         break;
