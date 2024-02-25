@@ -9,8 +9,19 @@
 #define GLSL_VERSION            100
 #endif
 
-inline Color BACKGROUND = {173,204,96,255};
-inline Color FOREGROUND = {43,51,24,255};
+inline std::vector<Color> const DARK_COLORS = {
+    { 67, 82, 61,255 },
+    { 43, 63, 9, 255 },
+    { 26, 25, 20,  255 }
+};
+
+inline std::vector<Color> const LIGHT_COLORS = {
+    { 199, 240, 216, 255 },
+    { 155, 199, 0, 255 },
+    { 135, 145, 136,  255 }
+};
+
+inline int currentColorScheme = 0;
 inline int WINDOW_WIDTH = 1280;
 inline int WINDOW_HEIGHT = 960;
 inline int NOKIA_WIDTH = 84;

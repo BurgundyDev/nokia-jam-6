@@ -21,7 +21,7 @@ bool Witch::CheckState() const
 void Witch::Draw()
 {
     if(m_IsLooking)
-        DrawCircle(6*CELL_SIZE, 2*CELL_SIZE, CELL_SIZE, FOREGROUND);
+        DrawCircle(6*CELL_SIZE, 2*CELL_SIZE, CELL_SIZE, LIGHT_COLORS[currentColorScheme]);
     else
-        DrawCircle(6*CELL_SIZE, 2*CELL_SIZE, CELL_SIZE, BACKGROUND);
+        DrawCircle(6*CELL_SIZE, 2*CELL_SIZE, CELL_SIZE, DARK_COLORS[currentColorScheme]);
 }

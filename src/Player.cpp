@@ -22,7 +22,7 @@ Player::Player(int x, int y)
 
 void Player::Draw()
 {
-    DrawTexture(m_Texture, m_Position.x, m_Position.y, FOREGROUND);
+    DrawTexture(m_Texture, m_Position.x, m_Position.y, DARK_COLORS[currentColorScheme]);
 }
 
 void Player::Update(bool was_witch_looking)

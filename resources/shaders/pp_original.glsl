@@ -8,8 +8,8 @@ in vec4 fragColor;
 uniform sampler2D texture0;
 uniform vec4 colDiffuse;
 
-vec4 lightColor = vec4(0.78, 0.941, 0.847, 1.0);
-vec4 darkColor = vec4(0.263, 0.322, 0.239, 1.0);
+vec4 lightColor = vec3(0.78, 0.941, 0.847);
+vec4 darkColor = vec3(0.263, 0.322, 0.239);
 
 // Output fragment color
 out vec4 finalColor;
@@ -23,8 +23,8 @@ void main()
 
     // Convert texel color to grayscale using NTSC conversion weights
     if (texelColor.r * 0.2126 + texelColor.g * 0.7152 + texelColor.b * 0.0722 > 0.5) {
-        finalColor = lightColor;
+        finalColor = vec4(lightColor, texelColor.a);
     } else {
-        finalColor = darkColor;
+        finalColor = vec4(darkColor, texelColor.a);
     }
 }

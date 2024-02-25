@@ -8,16 +8,17 @@
 
 // real nokia has 320x240px
 
+
+
 int main()
 {
     InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "codename frost");
 
     std::vector<Shader> const shaders = {
-        LoadShader(0, "resources/shaders/pp_original.glsl"),
-        LoadShader(0, "resources/shaders/pp_harsh.glsl"),
-        LoadShader(0, "resources/shaders/pp_gray.glsl")
+        LoadShader(nullptr, "resources/shaders/pp_original.glsl"),
+        LoadShader(nullptr, "resources/shaders/pp_harsh.glsl"),
+        LoadShader(nullptr, "resources/shaders/pp_gray.glsl")
     } ;
-    int currentShader = 0;
 
     PickupItem pi = PickupItem();
     Player player = Player(CELL_SIZE*CELL_COUNT_WIDTH - 50, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
@@ -26,10 +27,10 @@ int main()
     int hack_counter = 0;
     while (!WindowShouldClose())
     {
-        if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentShader++;
-        else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentShader--;
-        if (currentShader >= 3) currentShader = 0;
-        else if (currentShader < 0) currentShader = 3 - 1;
+        if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentColorScheme++;
+        else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentColorScheme--;
+        if (currentColorScheme >= 3) currentColorScheme = 0;
+        else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
         if(hack_counter == 50)
         {
@@ -37,8 +38,8 @@ int main()
             hack_counter = 0;
         }
         BeginDrawing();
-            BeginShaderMode(shaders[currentShader]);
-                ClearBackground(BLACK);
+            BeginShaderMode(shaders[currentColorScheme]);
+                ClearBackground(LIGHT_COLORS[currentColorScheme]);
                 player.Update(witch.CheckState());
                 player.Draw();
                 pi.Draw();
