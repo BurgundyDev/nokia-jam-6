@@ -2,7 +2,6 @@
 #pragma once
 #include "raylib.h"
 #include <vector>
-
 #if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
 #else   // PLATFORM_ANDROID, PLATFORM_WEB
@@ -22,8 +21,8 @@ inline std::vector<Color> const LIGHT_COLORS = {
 };
 
 inline int currentColorScheme = 0;
-inline int WINDOW_WIDTH = 1280;
-inline int WINDOW_HEIGHT = 960;
+inline int WINDOW_WIDTH = 840;
+inline int WINDOW_HEIGHT = 480;
 inline int NOKIA_WIDTH = 84;
 inline int NOKIA_HEIGHT = 48;
 inline int PIXEL_SCALE = WINDOW_WIDTH/NOKIA_WIDTH;

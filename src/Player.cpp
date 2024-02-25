@@ -5,18 +5,18 @@
 #include "Player.h"
 
 #include <nokia-jam-six.h>
-
 #include "raymath.h"
 
 Player::Player(int x, int y)
 {
     m_Position.x = x;
     m_Position.y = y;
-    Image temp_image = LoadImage("C:\\Users\\zysko\\Downloads\\player_front.png");
+    Image temp_image = LoadImage("resources/assets/player_front.png");
 #ifndef NOKIA_BUILD
     ImageResizeNN(&temp_image, 50, 80);
 #endif
     m_Image = &temp_image;
+    // ImageColorInvert(m_Image);
     m_Texture = LoadTextureFromImage(*m_Image);
 }
 

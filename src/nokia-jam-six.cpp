@@ -6,10 +6,6 @@
 #include "Player.h"
 #include "Witch.h"
 
-// real nokia has 320x240px
-
-
-
 int main()
 {
     InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "codename frost");
