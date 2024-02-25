@@ -15,6 +15,7 @@ public:
     void TurnAround();
     bool CheckState() const;
     void Draw();
+    void Reset();
 
 private:
     bool m_IsLooking;

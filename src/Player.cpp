@@ -25,6 +25,13 @@ Player::Player(int x, int y) : m_Position(x,y), m_CurrAlignment(PlayerAlignment:
 
 }
 
+void Player::Reset()
+{
+    m_Position = Vector2(CELL_SIZE*CELL_COUNT_WIDTH - 50, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
+    m_Lost = false;
+    m_CurrAlignment = PlayerAlignment::Y_aligned;
+}
+
 void Player::Draw()
 {
     int curr_texture_index;
