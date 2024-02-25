@@ -14,9 +14,9 @@ int main()
     InitWindow(CELL_SIZE*CELL_COUNT, CELL_SIZE*CELL_COUNT, "codename frost");
 
     std::vector<Shader> const shaders = {
-        LoadShader(0, "../../../resources/shaders/pp_original.glsl"),
-        LoadShader(0, "../../../resources/shaders/pp_harsh.glsl"),
-        LoadShader(0, "../../../resources/shaders/pp_gray.glsl")
+        LoadShader(0, "resources/shaders/pp_original.glsl"),
+        LoadShader(0, "resources/shaders/pp_harsh.glsl"),
+        LoadShader(0, "resources/shaders/pp_gray.glsl")
     } ;
     int currentShader = 0;
 
@@ -30,7 +30,6 @@ int main()
     {
         if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentShader++;
         else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentShader--;
-
         if (currentShader >= 3) currentShader = 0;
         else if (currentShader < 0) currentShader = 3 - 1;
 
