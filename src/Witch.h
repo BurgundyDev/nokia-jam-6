@@ -4,17 +4,26 @@
 
 #ifndef WITCH_H
 #define WITCH_H
+#include <array>
 
+#include "raylib.h"
 
 
 class Witch {
 public:
+    Witch();
     void TurnAround();
     bool CheckState() const;
     void Draw();
 
 private:
     bool m_IsLooking;
+    int m_CurrFrame;
+    Rectangle m_FrameRec;
+    Texture2D m_IdleTexture;
+    Texture2D m_LookingTextureSheet;
+    Texture2D m_LookingTexture;
+    Texture2D m_TurningTexture;
 };
 
 

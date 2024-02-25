@@ -7,6 +7,8 @@
 #include "Timer.h"
 #include "Witch.h"
 
+
+
 int main()
 {
     InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "codename frost");
@@ -31,11 +33,7 @@ int main()
         if (currentColorScheme >= 3) currentColorScheme = 0;
         else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
-        if(TimerDone(timer))
-        {
-            witch.TurnAround();
-            SetTimer(timer, (float)GetRandomValue(3, 10));
-        }
+
         BeginDrawing();
             BeginShaderMode(shaders[currentColorScheme]);
                 ClearBackground(LIGHT_COLORS[currentColorScheme]);
@@ -51,7 +49,11 @@ int main()
                 {
                     DrawText("You died lol", 100, 100, 15, DARK_COLORS[currentColorScheme]);
                 }
-
+                if(TimerDone(timer))
+                {
+                    witch.TurnAround();
+                    SetTimer(timer, (float)GetRandomValue(3, 10));
+                }
             EndShaderMode();
         EndDrawing();
         ++hack_counter;
