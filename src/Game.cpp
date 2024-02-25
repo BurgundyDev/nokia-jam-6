@@ -95,8 +95,7 @@ void Game::Run()
                 DrawTextureEx(menuTexture, {0, 0}, 0, CELL_SIZE, WHITE);
                 if (IsKeyPressed(KEY_V))
                 {
-                    m_Player->Reset();
-                    m_Witch->Reset();
+                    Reset();
                     m_CurrState = GAME_STATE::GAME;
                 }
                 else if (IsKeyPressed(KEY_C))
@@ -142,15 +141,15 @@ void Game::Run()
                 };
                 m_Player->Update(m_Witch->CheckState());
                     bool player_touches_candy = {
-                        m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x &&
-                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 5*CELL_SIZE &&
-                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 8*CELL_SIZE &&
-                        m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y
+                        m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x - 1*CELL_SIZE &&
+                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 6*CELL_SIZE + 1*CELL_SIZE &&
+                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 6*CELL_SIZE - 1*CELL_SIZE &&
+                        m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y + 1*CELL_SIZE
                     };
                     if(player_touches_candy && !m_PickedCandies.contains(m_Candies[m_CurrentStage]))
                         m_PickedCandies.insert(m_Candies[m_CurrentStage]);
 
-                    if(m_PickedCandies.size() == 3)
+                    if(m_PickedCandies.size() == 3 && m_Player->IsTop() && m_CurrentStage == 2)
                         m_CurrState = GAME_STATE::WIN;
 
                     UpdateTimer(m_Timer);
@@ -177,11 +176,9 @@ void Game::Run()
             if (IsKeyPressed(KEY_R))
             {
                 m_CurrState = GAME_STATE::GAME;
-                m_Player->Reset();
-                m_Witch->Reset();
+                Reset();
                 m_PickedCandies.clear();
                 m_CurrentStage = 0;
-                Reset();
             }
             break;
         case GAME_STATE::WIN:
@@ -189,11 +186,9 @@ void Game::Run()
             if (IsKeyPressed(KEY_R))
             {
                 m_CurrState = GAME_STATE::GAME;
-                m_Player->Reset();
-                m_Witch->Reset();
+                Reset();
                 m_PickedCandies.clear();
                 m_CurrentStage = 0;
-                Reset();
             }
             if(IsKeyPressed(KEY_M))
                 m_CurrState = GAME_STATE::MENU;

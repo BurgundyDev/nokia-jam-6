@@ -20,6 +20,7 @@ public:
     Game();
     void Run();
     void Draw();
+    void Reset();
 
 private:
     void Setup();
