@@ -36,7 +36,8 @@ add_executable (nokia-jam-six
         src/Player.cpp
         src/Player.h
         src/Witch.cpp
-        src/Witch.h)
+        src/Witch.h
+)
 target_sources(nokia-jam-six PRIVATE "src/nokia-jam-six.cpp")
 target_include_directories(nokia-jam-six PUBLIC include)
 target_link_libraries(${PROJECT_NAME} raylib)

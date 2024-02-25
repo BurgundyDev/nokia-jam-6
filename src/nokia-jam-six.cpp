@@ -12,14 +12,12 @@ using namespace std;
 
 int main()
 {
-   // InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "codename frost");
-    InitWindow(CELL_SIZE*CELL_COUNT, CELL_SIZE*CELL_COUNT, "codename frost");
+    InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "codename frost");
 
     PickupItem pi = PickupItem();
-    Player player = Player(0, CELL_SIZE * 10);
+    Player player = Player(CELL_SIZE*CELL_COUNT_WIDTH - 50, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
     SetTargetFPS(10);
     Witch witch = Witch();
-    //witch.TurnAround();
     int hack_counter = 0;
     while (!WindowShouldClose())
     {
