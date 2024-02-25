@@ -1,7 +1,7 @@
 ﻿
 #pragma once
 #include "raylib.h"
-#include <iostream>
+#include <vector>
 
 #if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
