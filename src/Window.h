@@ -15,19 +15,30 @@ public:
     Window();
     inline void StageUp()
     {
+        if(m_CurrAreaIdx < 2)
+        {
+            ++m_CurrAreaIdx;
+            m_CurrArea = m_FullMap[m_CurrAreaIdx];
+        }
+    }
+    inline void StageDown()
+    {
         if(m_CurrAreaIdx > 0)
         {
             --m_CurrAreaIdx;
             m_CurrArea = m_FullMap[m_CurrAreaIdx];
         }
     }
-    inline void StageDown()
+    void RegisterStates(StageLayout* uno, StageLayout* dos, StageLayout* tres)
     {
-        if(m_CurrAreaIdx < 3)
-        {
-            ++m_CurrAreaIdx;
-            m_CurrArea = m_FullMap[m_CurrAreaIdx];
-        }
+        m_FullMap[0] = uno;
+        m_FullMap[1] = dos;
+        m_FullMap[2] = tres;
+    }
+
+    Vector2 GetCurrentStageCandyPos() const
+    {
+        return m_FullMap[m_CurrAreaIdx]->CandyPosition;
     }
 private:
     int m_CurrAreaIdx;

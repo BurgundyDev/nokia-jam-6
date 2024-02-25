@@ -21,6 +21,23 @@ Game::Game() : m_CurrState(GAME_STATE::MENU)
     m_PlayerIsBottom = false;
     m_PlayerIsTop = false;
     m_CurrentStage = 0;
+
+
+    Vector2 temp1 = {(float)GetRandomValue(2*CELL_SIZE, 18*CELL_SIZE),
+        (float)GetRandomValue(20* CELL_SIZE, 84 * CELL_SIZE)};
+    Vector2 temp2 = {(float)GetRandomValue(2*CELL_SIZE, 18*CELL_SIZE),
+        (float)GetRandomValue(20* CELL_SIZE, 84 * CELL_SIZE)};
+    Vector2 temp3 = {(float)GetRandomValue(2*CELL_SIZE, 18*CELL_SIZE),
+        (float)GetRandomValue(20* CELL_SIZE, 84 * CELL_SIZE)};
+    StageLayout* first_stage = new StageLayout(temp1);
+    StageLayout* second_stage = new StageLayout(temp2);
+    StageLayout* third_stage = new StageLayout(temp3);
+    m_Window->RegisterStates(first_stage, second_stage, third_stage);
+    m_Candies = { new PickupItem(first_stage->CandyPosition),
+                  new PickupItem(second_stage->CandyPosition),
+                  new PickupItem(third_stage->CandyPosition)};
+    m_PickedCandies = {};
+    m_CandiesPositions = {temp1, temp2, temp3};
 }
 
 void Game::Run()
@@ -84,9 +101,24 @@ void Game::Run()
                 m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
             };
             m_Player->Update(m_Witch->CheckState());
+            bool player_touches_candy = {
+                m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x &&
+                m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 60 &&
+                m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y &&
+                m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y + 60
+            };
+            if(player_touches_candy && !m_PickedCandies.contains(m_Candies[m_CurrentStage]))
+                    m_PickedCandies.insert(m_Candies[m_CurrentStage]);
+
+            if(m_PickedCandies.size() == 3)
+                m_CurrState = GAME_STATE::WIN;
+
             UpdateTimer(m_Timer);
             m_Player->Draw();
             m_Witch->Draw();
+
+            if(!m_PickedCandies.contains(m_Candies[m_CurrentStage]))
+                m_Candies[m_CurrentStage]->Draw();
             DrawText(TextFormat("Current Stage: %i", m_CurrentStage), 120, 300, 25, DARK_COLORS[currentColorScheme]);
         }
         else
@@ -101,6 +133,7 @@ void Game::Run()
             m_CurrState = GAME_STATE::GAME;
             m_Player->Reset();
             m_Witch->Reset();
+            m_PickedCandies.clear();
         }
         break;
     case GAME_STATE::WIN:
@@ -110,6 +143,7 @@ void Game::Run()
             m_CurrState = GAME_STATE::GAME;
             m_Player->Reset();
             m_Witch->Reset();
+            m_PickedCandies.clear();
         }
         break;
     }

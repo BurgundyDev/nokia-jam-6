@@ -5,7 +5,10 @@
 #ifndef GAME_H
 #define GAME_H
 #include <nokia-jam-six.h>
+#include <set>
+#include <unordered_set>
 
+#include "PickupItem.h"
 #include "Player.h"
 #include "Timer.h"
 #include "Window.h"
@@ -32,6 +35,9 @@ private:
     bool m_PlayerIsTop;
 
     int m_CurrentStage;
+    std::unordered_set<PickupItem*> m_PickedCandies;
+    std::vector<PickupItem*> m_Candies;
+    std::vector<Vector2> m_CandiesPositions;
 
 };
 

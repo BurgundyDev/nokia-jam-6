@@ -2,16 +2,20 @@
 
 #include <nokia-jam-six.h>
 
-PickupItem::PickupItem()
+PickupItem::PickupItem(const Vector2& pos)
 {
-    m_Position = GeneratePosition();
+    Image temp = LoadImage("resources/images/enviro/candy.png");
+#ifndef NOKIA_BUILD
+    ImageResizeNN(&temp, 60, 60);
+#endif
+    m_Texture = LoadTextureFromImage(temp);
+    m_Position = pos;
 }
 
 void PickupItem::Draw()
 {
     //DrawRectangle(m_Position.x * CELL_SIZE, m_Position.y * CELL_SIZE, CELL_SIZE, CELL_SIZE, LIGHT_COLOR);
-    DrawRectangleRounded({m_Position.x * CELL_SIZE, m_Position.y * CELL_SIZE, (float)CELL_SIZE, (float)CELL_SIZE}
-                                , .5f, 10, DARK_COLORS[currentColorScheme]);
+    DrawTexture(m_Texture, m_Position.x, m_Position.y, DARK_COLORS[currentColorScheme]);
 }
 
 Vector2 PickupItem::GeneratePosition()
