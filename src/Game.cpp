@@ -49,6 +49,25 @@ void Game::Run()
         if (currentColorScheme >= 3) currentColorScheme = 0;
         else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
+#ifdef NJ_DEBUG
+        if (IsKeyPressed(KEY_ONE))
+        {
+                       m_CurrState = GAME_STATE::WIN;
+        }
+        else if (IsKeyPressed(KEY_TWO))
+        {
+                       m_CurrState = GAME_STATE::LOSE;
+        }
+        else if (IsKeyPressed(KEY_THREE))
+        {
+                       m_CurrState = GAME_STATE::CREDITS;
+        }
+        else if (IsKeyPressed(KEY_FOUR))
+        {
+                       m_CurrState = GAME_STATE::MENU;
+        }
+#endif
+
         BeginDrawing();
         BeginShaderMode(shaders[currentColorScheme]);
         ClearBackground(LIGHT_COLORS[currentColorScheme]);
@@ -59,6 +78,8 @@ void Game::Run()
                 DrawTextureEx(menuTexture, {0, 0}, 0, CELL_SIZE, WHITE);
                 if (IsKeyPressed(KEY_V))
                 {
+                    m_Player->Reset();
+                    m_Witch->Reset();
                     m_CurrState = GAME_STATE::GAME;
                 }
                 else if (IsKeyPressed(KEY_C))
@@ -99,15 +120,15 @@ void Game::Run()
                 m_Player->Draw();
                 m_Witch->Draw();
                 DrawText(TextFormat("Current Stage: %i", m_CurrentStage), 120, 300, 25, DARK_COLORS[currentColorScheme]);
-        }
-        else
-        {
-            m_CurrState = GAME_STATE::LOSE;
-        }
-        break;
+                }
+                else
+                {
+                    m_CurrState = GAME_STATE::LOSE;
+                }
+                break;
     case GAME_STATE::LOSE:
-        DrawText("You lost! Press Enter to restart", 10, 10, 20, DARK_COLORS[currentColorScheme]);
-        if (IsKeyPressed(KEY_ENTER))
+        DrawTextureEx(loseTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
+        if (IsKeyPressed(KEY_R))
         {
             m_CurrState = GAME_STATE::GAME;
             m_Player->Reset();
@@ -115,12 +136,19 @@ void Game::Run()
         }
         break;
     case GAME_STATE::WIN:
-        DrawText("You won! Press Enter to restart", 10, 10, 20, DARK_COLORS[currentColorScheme]);
-        if (IsKeyPressed(KEY_ENTER))
+        DrawTextureEx(creditsTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
+        if (IsKeyPressed(KEY_R))
         {
             m_CurrState = GAME_STATE::GAME;
             m_Player->Reset();
             m_Witch->Reset();
+        }
+        break;
+    case GAME_STATE::CREDITS:
+        DrawTextureEx(creditsTexture, {0, 0}, 0, CELL_SIZE, WHITE);
+        if (IsKeyPressed(KEY_M))
+        {
+            m_CurrState = GAME_STATE::MENU;
         }
         break;
     }
