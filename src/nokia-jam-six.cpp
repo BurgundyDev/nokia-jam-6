@@ -37,7 +37,7 @@ int main()
             SetTimer(timer, (float)GetRandomValue(3, 10));
         }
         BeginDrawing();
-            //BeginShaderMode(shaders[currentColorScheme]);
+            BeginShaderMode(shaders[currentColorScheme]);
                 ClearBackground(LIGHT_COLORS[currentColorScheme]);
                 if(!player.CheckLoss())
                 {
@@ -52,7 +52,7 @@ int main()
                     DrawText("You died lol", 100, 100, 15, DARK_COLORS[currentColorScheme]);
                 }
 
-            //EndShaderMode();
+            EndShaderMode();
         EndDrawing();
         ++hack_counter;
     }
