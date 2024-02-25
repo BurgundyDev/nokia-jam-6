@@ -18,11 +18,28 @@ enum class PlayerAlignment
 class Player {
 
 public:
-    Player(int x = 0, int y = 0);
+    explicit Player(bool& top_listener, bool& bottom_listener, int x, int y);
     void Draw();
     void Update(bool was_witch_looking);
     bool CheckLoss();
     void Reset();
+
+    inline bool IsBottom() const
+    {
+        return m_BottomListener;
+    }
+    inline void SetBottom(const bool& arg)
+    {
+        m_BottomListener = arg;
+    }
+    inline bool IsTop() const
+    {
+        return m_TopListener;
+    }
+    inline void SetTop(const bool& arg)
+    {
+        m_TopListener = arg;
+    }
 
 
 private:
@@ -32,6 +49,9 @@ private:
     std::array<Texture2D, 3> m_Textures;
     PlayerAlignment m_CurrAlignment;
     bool m_Lost = false;
+
+    bool m_TopListener;
+    bool m_BottomListener;
 
 };
 

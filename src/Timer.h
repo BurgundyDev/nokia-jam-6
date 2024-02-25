@@ -11,14 +11,14 @@ struct Timer
     float lifetime;
 };
 
-void SetTimer(Timer* timer, float life_time)
+inline void SetTimer(Timer* timer, float life_time)
 {
     if(!timer)
         return;
     timer->lifetime = life_time;
 }
 
-void UpdateTimer(Timer* timer)
+inline void UpdateTimer(Timer* timer)
 {
     if(!timer)
         return;
@@ -27,7 +27,7 @@ void UpdateTimer(Timer* timer)
     timer->lifetime -= GetFrameTime();
 }
 
-bool TimerDone(Timer* timer)
+inline bool TimerDone(Timer* timer)
 {
     if(timer)
         return timer->lifetime <= 0;

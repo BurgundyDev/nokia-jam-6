@@ -30,7 +30,12 @@ endif()
 
 # set(raylib_VERBOSE 1)
 
-add_executable (nokia-jam-six)
+add_executable (nokia-jam-six
+        src/Window.cpp
+        src/Window.h
+        src/StageLayout.h
+        src/Game.cpp
+        src/Game.h)
 target_sources(nokia-jam-six PRIVATE 
     "src/nokia-jam-six.cpp"
     "src/PickupItem.cpp" 

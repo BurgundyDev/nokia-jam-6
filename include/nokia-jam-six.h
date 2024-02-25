@@ -17,7 +17,7 @@ enum class GAME_STATE
     CREDITS = 4
 };
 
-inline GAME_STATE currentGameState;
+inline GAME_STATE m_CurrState;
 
 inline std::vector<Color> const DARK_COLORS = {
     { 67, 82, 61,255 },

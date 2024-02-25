@@ -7,7 +7,8 @@
 #include <nokia-jam-six.h>
 #include "raymath.h"
 
-Player::Player(int x, int y) : m_Position(x,y), m_CurrAlignment(PlayerAlignment::Y_aligned)
+Player::Player(bool& top_listener, bool& bottom_listener, int x, int y)
+    : m_Position(x,y), m_CurrAlignment(PlayerAlignment::Y_aligned)
 {
     Image temp_image_front = LoadImage("resources/images/player/player_front.png");
     Image temp_image_back = LoadImage("resources/images/player/player_back.png");
@@ -22,6 +23,9 @@ Player::Player(int x, int y) : m_Position(x,y), m_CurrAlignment(PlayerAlignment:
     m_Textures[1] = LoadTextureFromImage(m_Images[1]);
     ImageFlipHorizontal(&m_Images[1]);
     m_Textures[2] = LoadTextureFromImage(m_Images[1]);
+
+    m_TopListener = false;
+    m_BottomListener = false;
 
 }
 
@@ -57,8 +61,8 @@ void Player::Update(bool was_witch_looking)
 {
     bool can_move_up = m_Position.y > (20*CELL_SIZE + m_Textures[0].height);
     bool can_move_down = m_Position.y < (84 * CELL_SIZE - m_Textures[0].height);
-    bool can_move_left = m_Position.x > 0 + m_Textures[0].width - m_Textures[0].width/2 + 1; //origin + texture size/2
-    bool can_move_right = m_Position.x < 48 * CELL_SIZE - m_Textures[0].width;
+    bool can_move_left = m_Position.x > 0 + m_Textures[0].width - m_Textures[0].width/2 + 6; //origin + texture size/2
+    bool can_move_right = m_Position.x < 48 * CELL_SIZE - m_Textures[0].width - 4;
     if (can_move_right && IsKeyDown(KEY_RIGHT))
     {
         Move(CELL_SIZE, 0, was_witch_looking);
@@ -74,9 +78,19 @@ void Player::Update(bool was_witch_looking)
         Move(0, -CELL_SIZE, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Y_aligned;
     }
+    if (!can_move_up && IsKeyDown(KEY_UP))
+    {
+        m_TopListener = true;
+        m_CurrAlignment = PlayerAlignment::Y_aligned;
+    }
     if (can_move_down && IsKeyDown(KEY_DOWN))
     {
         Move(0, CELL_SIZE, was_witch_looking);
+        m_CurrAlignment = PlayerAlignment::Y_aligned;
+    }
+    if (!can_move_down && IsKeyDown(KEY_DOWN))
+    {
+        m_BottomListener = true;
         m_CurrAlignment = PlayerAlignment::Y_aligned;
     }
 
