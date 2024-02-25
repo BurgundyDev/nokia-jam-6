@@ -70,17 +70,20 @@ void Game::Run()
                 m_Witch->TurnAround();
                 SetTimer(m_Timer, (float)GetRandomValue(3, 10));
             }
-            if(m_Player->IsTop() && m_CurrentStage < 3)
+            if(m_Player->IsTop() && m_CurrentStage < 2)
             {
                 m_Window->StageUp();
                 m_Player->SetTop(false);
                 ++m_CurrentStage;
+                m_Player->SetPosition(m_Player->GetPosition().x, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
+
             }
             if(m_Player->IsBottom() && m_CurrentStage > 0)
             {
                 m_Window->StageDown();
                 m_Player->SetBottom(false);
                 --m_CurrentStage;
+                m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
             };
             m_Player->Update(m_Witch->CheckState());
             UpdateTimer(m_Timer);

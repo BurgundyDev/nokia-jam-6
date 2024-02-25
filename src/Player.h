@@ -40,6 +40,14 @@ public:
     {
         m_TopListener = arg;
     }
+    void SetPosition(float x, float y)
+    {
+        m_Position = {x,y};
+    }
+    Vector2 GetPosition() const
+    {
+        return m_Position;
+    }
 
 
 private:
