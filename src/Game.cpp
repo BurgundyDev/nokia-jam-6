@@ -65,24 +65,26 @@ void Game::Run()
         else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentColorScheme--;
         if (currentColorScheme >= 3) currentColorScheme = 0;
         else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
+
 #ifdef NJ_DEBUG
         if (IsKeyPressed(KEY_ONE))
         {
-            m_CurrState = GAME_STATE::WIN;
+                       m_CurrState = GAME_STATE::WIN;
         }
         else if (IsKeyPressed(KEY_TWO))
         {
-            m_CurrState = GAME_STATE::LOSE;
+                       m_CurrState = GAME_STATE::LOSE;
         }
         else if (IsKeyPressed(KEY_THREE))
         {
-            m_CurrState = GAME_STATE::CREDITS;
+                       m_CurrState = GAME_STATE::CREDITS;
         }
         else if (IsKeyPressed(KEY_FOUR))
         {
-            m_CurrState = GAME_STATE::MENU;
+                       m_CurrState = GAME_STATE::MENU;
         }
 #endif
+
         BeginDrawing();
         BeginShaderMode(shaders[currentColorScheme]);
         ClearBackground(LIGHT_COLORS[currentColorScheme]);
@@ -93,6 +95,8 @@ void Game::Run()
                 DrawTextureEx(menuTexture, {0, 0}, 0, CELL_SIZE, WHITE);
                 if (IsKeyPressed(KEY_V))
                 {
+                    m_Player->Reset();
+                    m_Witch->Reset();
                     m_CurrState = GAME_STATE::GAME;
                 }
                 else if (IsKeyPressed(KEY_C))
