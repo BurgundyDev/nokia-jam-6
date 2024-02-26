@@ -31,6 +31,15 @@ endif()
 # set(raylib_VERBOSE 1)
 
 add_executable (nokia-jam-six)
+
+if(WIN32)
+    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+    # target_compile_options(nokia-jam-six PRIVATE /W4 /WX)
+    add_compile_definitions(NJ_WINDOWS)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 target_sources(nokia-jam-six PRIVATE 
     "src/nokia-jam-six.cpp"
     "src/PickupItem.cpp" 
@@ -39,11 +48,11 @@ target_sources(nokia-jam-six PRIVATE
     "src/Game.cpp"
     "src/Window.cpp"
     )
-target_include_directories(nokia-jam-six PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
-set_property(TARGET nokia-jam-six PROPERTY CXX_STANDARD 20)
-add_custom_command(TARGET nokia-jam-six POST_BUILD
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/resources)
 

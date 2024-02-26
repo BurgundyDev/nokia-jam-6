@@ -8,7 +8,11 @@
 #include "Timer.h"
 #include "Witch.h"
 
-int main()
+#ifdef NJ_WINDOWS
+int WinMain(int argc, char* argv[])
+#else
+int main(int argc, char* argv[])
+#endif
 {
     m_CurrState = GAME_STATE::MENU;
 
