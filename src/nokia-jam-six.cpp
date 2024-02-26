@@ -13,7 +13,7 @@ int main()
     m_CurrState = GAME_STATE::MENU;
 
 
-    InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "codename frost");
+    InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "Yaga's Candy House");
     SetTargetFPS(10);
 
     InitAudioDevice();
