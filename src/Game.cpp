@@ -85,24 +85,10 @@ void Game::Run()
         if (currentColorScheme >= 3) currentColorScheme = 0;
         else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
 
-#ifdef NJ_DEBUG
-        if (IsKeyPressed(KEY_ONE))
-        {
-                       m_CurrState = GAME_STATE::WIN;
-        }
-        else if (IsKeyPressed(KEY_TWO))
-        {
-                       m_CurrState = GAME_STATE::LOSE;
-        }
-        else if (IsKeyPressed(KEY_THREE))
-        {
-                       m_CurrState = GAME_STATE::CREDITS;
-        }
-        else if (IsKeyPressed(KEY_FOUR))
-        {
-                       m_CurrState = GAME_STATE::MENU;
-        }
-#endif
+        if (IsKeyPressed(KEY_ONE)) currentColorScheme = 0;
+        else if (IsKeyPressed(KEY_TWO)) currentColorScheme = 1;
+        else if (IsKeyPressed(KEY_THREE)) currentColorScheme = 2;
+
         if (m_CurrState == GAME_STATE::GAME)
         {
             StopMusicStream(TRACKS[currentTrack]);
