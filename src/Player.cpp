@@ -58,26 +58,34 @@ void Player::Draw()
 }
 
 // My teammates may forgive me for making this function return a bool, but I won't forgive myself.
-bool Player::Update(bool was_witch_looking)
+bool Player::Update(bool was_witch_looking, Timer* timer)
 {
+    bool can_move = TimerDone(timer);
+        if (!can_move)
+        {
+            return false;
+        }
     bool can_move_up = m_Position.y > (20*CELL_SIZE + m_Textures[0].height);
     bool can_move_down = m_Position.y < (84 * CELL_SIZE - m_Textures[0].height);
     bool can_move_left = m_Position.x > 0 + m_Textures[0].width - m_Textures[0].width/2 + 6; //origin + texture size/2
     bool can_move_right = m_Position.x < 48 * CELL_SIZE - m_Textures[0].width - 4;
     if (can_move_right && IsKeyDown(KEY_RIGHT))
     {
+        SetTimer(timer, 0.3f);
         Move(CELL_SIZE, 0, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Right;
         return true;
     }
     if (can_move_left && IsKeyDown(KEY_LEFT))
     {
+        SetTimer(timer, 0.3f);
         Move(-CELL_SIZE, 0, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Left;
         return true;
     }
     if (can_move_up && IsKeyDown(KEY_UP))
     {
+        SetTimer(timer, 0.3f);
         Move(0, -CELL_SIZE, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Y_aligned;
         return true;
@@ -89,6 +97,7 @@ bool Player::Update(bool was_witch_looking)
     }
     if (can_move_down && IsKeyDown(KEY_DOWN))
     {
+        SetTimer(timer, 0.3f);
         Move(0, CELL_SIZE, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Y_aligned;
         return true;

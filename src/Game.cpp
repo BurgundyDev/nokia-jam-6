@@ -12,6 +12,7 @@ Game::Game() : m_CurrState(GAME_STATE::MENU)
 {
     m_Timer = new Timer();
     m_Witch = new Witch();
+    m_PlayerTimer = new Timer();
 #ifndef NOKIA_BUILD
     m_Player = new Player(m_PlayerIsTop, m_PlayerIsBottom, CELL_SIZE*CELL_COUNT_WIDTH - 50, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
 #endif
@@ -20,6 +21,7 @@ Game::Game() : m_CurrState(GAME_STATE::MENU)
 #endif
     m_Window = new Window();
     SetTimer(m_Timer, (float)GetRandomValue(1, 10));
+    SetTimer(m_PlayerTimer, 0.1f);
     m_PlayerIsBottom = false;
     m_PlayerIsTop = false;
     m_CurrentStage = 0;
@@ -171,7 +173,7 @@ void Game::Run()
                         --m_CurrentStage;
                         m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
                     }
-                    if (m_Player->Update(m_Witch->CheckState())) { PlayMoveSound(); }
+                    if (m_Player->Update(m_Witch->CheckState(), m_PlayerTimer)) { PlayMoveSound(); }
                     bool player_touches_candy = {
                         m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x - 2 * CELL_SIZE &&
                         m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 8 * CELL_SIZE &&
@@ -191,6 +193,7 @@ void Game::Run()
                         m_CurrState = GAME_STATE::WIN;
 
                     UpdateTimer(m_Timer);
+                    UpdateTimer(m_PlayerTimer);
                     m_Player->Draw();
                     if(m_AnimationFrameCounter <= 0 || m_AnimationFrameCounter > 200)
                         m_Witch->Draw();

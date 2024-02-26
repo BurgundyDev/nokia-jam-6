@@ -33,6 +33,7 @@ private:
     Player* m_Player;
     Witch* m_Witch;
     Timer* m_Timer;
+    Timer* m_PlayerTimer;
 
     GAME_STATE m_CurrState;
 

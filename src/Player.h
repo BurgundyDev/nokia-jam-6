@@ -5,7 +5,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <array>
-
+#include "Timer.h"
 #include "raylib.h"
 
 enum class PlayerAlignment
@@ -20,7 +20,7 @@ class Player {
 public:
     explicit Player(bool& top_listener, bool& bottom_listener, int x, int y);
     void Draw();
-    bool Update(bool was_witch_looking);
+    bool Update(bool was_witch_looking, Timer* timer);
     bool CheckLoss();
     void Reset();
 

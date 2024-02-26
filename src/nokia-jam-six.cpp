@@ -14,7 +14,7 @@ int main()
 
 
     InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "Yaga's Candy House");
-    SetTargetFPS(10);
+    SetTargetFPS(30);
 
     InitAudioDevice();
 
