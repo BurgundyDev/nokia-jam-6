@@ -30,20 +30,17 @@ endif()
 
 # set(raylib_VERBOSE 1)
 
-add_executable (nokia-jam-six
-        src/Window.cpp
-        src/Window.h
-        src/StageLayout.h
-        src/Game.cpp
-        src/Game.h)
+add_executable (nokia-jam-six)
 target_sources(nokia-jam-six PRIVATE 
     "src/nokia-jam-six.cpp"
     "src/PickupItem.cpp" 
     "src/Player.cpp" 
     "src/Witch.cpp"
+    "src/Game.cpp"
+    "src/Window.cpp"
     )
 target_include_directories(nokia-jam-six PUBLIC include)
-target_link_libraries(${PROJECT_NAME} raylib)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
 set_property(TARGET nokia-jam-six PROPERTY CXX_STANDARD 20)
 add_custom_command(TARGET nokia-jam-six POST_BUILD
