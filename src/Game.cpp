@@ -4,7 +4,9 @@
 
 #include "Game.h"
 
+#include <map>
 #include <nokia-jam-six.h>
+#include <string>
 
 Game::Game() : m_CurrState(GAME_STATE::MENU)
 {
@@ -42,6 +44,13 @@ Game::Game() : m_CurrState(GAME_STATE::MENU)
 
 void Game::Run()
 {
+    TRACKS[GAME_STATE::MENU] = LoadMusicStream("resources/sound/menu.wav");
+    TRACKS[GAME_STATE::WIN] = LoadMusicStream("resources/sound/win.wav");
+    TRACKS[GAME_STATE::LOSE] = LoadMusicStream("resources/sound/lose.wav");
+    TRACKS[GAME_STATE::CREDITS] = LoadMusicStream("resources/sound/credits.wav");
+
+    m_pickupSound = LoadSound("resources/sound/pickup.wav");
+    m_moveSound = LoadSound("resources/sound/move.wav");
 
     std::vector<Shader> const shaders = {
         LoadShader(nullptr, "resources/shaders/pp_original.glsl"),
@@ -58,9 +67,12 @@ void Game::Run()
     Image const creditsImage = LoadImage("resources/images/credits_screen.png");
     Texture2D const creditsTexture = LoadTextureFromImage(creditsImage);
 
+    GAME_STATE currentTrack = GAME_STATE::MENU;
+    PlayMusicStream(TRACKS[currentTrack]);
+    m_isMusicPlaying = true;
+
     while(!WindowShouldClose())
     {
-
         if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentColorScheme++;
         else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentColorScheme--;
         if (currentColorScheme >= 3) currentColorScheme = 0;
@@ -84,6 +96,24 @@ void Game::Run()
                        m_CurrState = GAME_STATE::MENU;
         }
 #endif
+        if (m_CurrState == GAME_STATE::GAME)
+        {
+            StopMusicStream(TRACKS[currentTrack]);
+            m_isMusicPlaying = false;
+        }
+        else if(m_CurrState != currentTrack)
+        {
+            if (m_isMusicPlaying)
+            {
+                StopMusicStream(TRACKS[currentTrack]);
+            }
+            currentTrack = m_CurrState;
+            PlayMusicStream(TRACKS[currentTrack]);
+            m_isMusicPlaying = true;
+        } else
+        {
+            UpdateMusicStream(TRACKS[currentTrack]);
+        }
 
         BeginDrawing();
         BeginShaderMode(shaders[currentColorScheme]);
@@ -91,8 +121,8 @@ void Game::Run()
 
         switch (m_CurrState)
         {
-            case GAME_STATE::MENU:
-                DrawTextureEx(menuTexture, {0, 0}, 0, CELL_SIZE, WHITE);
+        case GAME_STATE::MENU:
+                DrawTextureEx(menuTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
                 if (IsKeyPressed(KEY_V))
                 {
                     Reset();
@@ -104,12 +134,9 @@ void Game::Run()
                 }
                 break;
             case GAME_STATE::GAME:
+                
                 if (!m_Player->CheckLoss())
                 {
-                    if (IsKeyPressed(KEY_RIGHT_BRACKET)) currentColorScheme++;
-                    else if (IsKeyPressed(KEY_LEFT_BRACKET)) currentColorScheme--;
-                    if (currentColorScheme >= 3) currentColorScheme = 0;
-                    else if (currentColorScheme < 0) currentColorScheme = 3 - 1;
                 if(TimerDone(m_Timer) && m_WitchWasLookingLastFrame)
                 {
                     m_Witch->TurnAround();
@@ -139,15 +166,21 @@ void Game::Run()
                     --m_CurrentStage;
                     m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
                 };
-                m_Player->Update(m_Witch->CheckState());
+                if (m_Player->Update(m_Witch->CheckState())) { PlayMoveSound(); }
                     bool player_touches_candy = {
-                        m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x - 1*CELL_SIZE &&
-                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 6*CELL_SIZE + 1*CELL_SIZE &&
-                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 6*CELL_SIZE - 1*CELL_SIZE &&
-                        m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y + 1*CELL_SIZE
+                        m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x - 2*CELL_SIZE &&
+                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 8*CELL_SIZE &&
+                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 8*CELL_SIZE &&
+                        m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y + 2*CELL_SIZE
                     };
                     if(player_touches_candy && !m_PickedCandies.contains(m_Candies[m_CurrentStage]))
+                    {
                         m_PickedCandies.insert(m_Candies[m_CurrentStage]);
+                        if(IsSoundPlaying(m_moveSound))
+                            StopSound(m_moveSound);
+                        if(!IsSoundPlaying(m_pickupSound))
+                            PlaySound(m_pickupSound);
+                    }
 
                     if(m_PickedCandies.size() == 3 && m_Player->IsTop() && m_CurrentStage == 2)
                         m_CurrState = GAME_STATE::WIN;
@@ -177,9 +210,9 @@ void Game::Run()
             {
                 m_CurrState = GAME_STATE::GAME;
                 Reset();
-                m_PickedCandies.clear();
-                m_CurrentStage = 0;
             }
+            if (IsKeyPressed(KEY_M))
+                m_CurrState = GAME_STATE::MENU;
             break;
         case GAME_STATE::WIN:
         DrawTextureEx(winTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
@@ -187,8 +220,6 @@ void Game::Run()
             {
                 m_CurrState = GAME_STATE::GAME;
                 Reset();
-                m_PickedCandies.clear();
-                m_CurrentStage = 0;
             }
             if(IsKeyPressed(KEY_M))
                 m_CurrState = GAME_STATE::MENU;
@@ -240,4 +271,24 @@ void Game::Reset()
                   new PickupItem(third_stage->CandyPosition) };
     m_PickedCandies = {};
     m_CandiesPositions = { temp1, temp2, temp3 };
+}
+
+void Game::CleanupMusic()
+{
+    if (m_isMusicPlaying)
+    {
+        StopMusicStream(TRACKS[m_currentTrack]);
+    }
+    for (auto& track : TRACKS)
+    {
+        UnloadMusicStream(track.second);
+    }
+}
+
+void Game::PlayMoveSound()
+{
+    if (IsSoundPlaying(m_moveSound))
+       StopSound(m_moveSound);
+
+    PlaySound(m_moveSound);
 }

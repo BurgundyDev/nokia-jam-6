@@ -4,8 +4,9 @@
 
 #ifndef GAME_H
 #define GAME_H
+#include <map>
 #include <nokia-jam-six.h>
-#include <set>
+#include <string>
 #include <unordered_set>
 
 #include "PickupItem.h"
@@ -21,6 +22,8 @@ public:
     void Run();
     void Draw();
     void Reset();
+    void CleanupMusic();
+    void PlayMoveSound();
 
 private:
     void Setup();
@@ -39,6 +42,13 @@ private:
     std::unordered_set<PickupItem*> m_PickedCandies;
     std::vector<PickupItem*> m_Candies;
     std::vector<Vector2> m_CandiesPositions;
+
+    GAME_STATE m_currentTrack;
+    std::map<GAME_STATE, Music> TRACKS;
+    bool m_isMusicPlaying;
+
+    Sound m_pickupSound;
+    Sound m_moveSound;
 
     bool m_WitchWasLookingLastFrame = false;
     int m_AnimationFrameCounter = 0;

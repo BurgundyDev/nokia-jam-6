@@ -57,7 +57,8 @@ void Player::Draw()
     DrawTexture(m_Textures[curr_texture_index], m_Position.x, m_Position.y, DARK_COLORS[currentColorScheme]);
 }
 
-void Player::Update(bool was_witch_looking)
+// My teammates may forgive me for making this function return a bool, but I won't forgive myself.
+bool Player::Update(bool was_witch_looking)
 {
     bool can_move_up = m_Position.y > (20*CELL_SIZE + m_Textures[0].height);
     bool can_move_down = m_Position.y < (84 * CELL_SIZE - m_Textures[0].height);
@@ -67,16 +68,19 @@ void Player::Update(bool was_witch_looking)
     {
         Move(CELL_SIZE, 0, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Right;
+        return true;
     }
     if (can_move_left && IsKeyDown(KEY_LEFT))
     {
         Move(-CELL_SIZE, 0, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Left;
+        return true;
     }
     if (can_move_up && IsKeyDown(KEY_UP))
     {
         Move(0, -CELL_SIZE, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Y_aligned;
+        return true;
     }
     if (!can_move_up && IsKeyDown(KEY_UP))
     {
@@ -87,13 +91,14 @@ void Player::Update(bool was_witch_looking)
     {
         Move(0, CELL_SIZE, was_witch_looking);
         m_CurrAlignment = PlayerAlignment::Y_aligned;
+        return true;
     }
     if (!can_move_down && IsKeyDown(KEY_DOWN))
     {
         m_BottomListener = true;
         m_CurrAlignment = PlayerAlignment::Y_aligned;
     }
-
+    return false;
 }
 
 void Player::Move(float x, float y, bool was_witch_looking)

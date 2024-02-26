@@ -16,11 +16,13 @@ int main()
     InitWindow(CELL_SIZE*CELL_COUNT_WIDTH, CELL_SIZE*CELL_COUNT_HEIGHT, "codename frost");
     SetTargetFPS(10);
 
+    InitAudioDevice();
 
     Game* game = new Game();
     game->Run();
 
-
+    game->CleanupMusic();
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;

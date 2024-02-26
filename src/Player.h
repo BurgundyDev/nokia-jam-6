@@ -20,7 +20,7 @@ class Player {
 public:
     explicit Player(bool& top_listener, bool& bottom_listener, int x, int y);
     void Draw();
-    void Update(bool was_witch_looking);
+    bool Update(bool was_witch_looking);
     bool CheckLoss();
     void Reset();
 
