@@ -67,6 +67,11 @@ void Game::Run()
     Image const creditsImage = LoadImage("resources/images/credits_screen.png");
     Texture2D const creditsTexture = LoadTextureFromImage(creditsImage);
 
+    Image const witchSpriteFront = LoadImage("resources/images/witch_sprite/yaga_front.png");
+    Image const witchSpriteBack = LoadImage("resources/images/witch_sprite/yaga_back.png");
+    Texture2D const witchTextureFront = LoadTextureFromImage(witchSpriteFront);
+    Texture2D const witchTextureBack = LoadTextureFromImage(witchSpriteBack);
+
     GAME_STATE currentTrack = GAME_STATE::MENU;
     PlayMusicStream(TRACKS[currentTrack]);
     m_isMusicPlaying = true;
@@ -137,41 +142,41 @@ void Game::Run()
                 
                 if (!m_Player->CheckLoss())
                 {
-                if(TimerDone(m_Timer) && m_WitchWasLookingLastFrame)
-                {
-                    m_Witch->TurnAround();
-                    SetTimer(m_Timer, (float)GetRandomValue(3, 10));
-                    m_WitchWasLookingLastFrame = false;
-                    m_AnimationFrameCounter = 0;
-                }
-                else if(TimerDone(m_Timer) && !m_WitchWasLookingLastFrame)
-                {
-                    ++m_AnimationFrameCounter;
-                    if(m_AnimationFrameCounter == 16)
-                        m_WitchWasLookingLastFrame = true;
-                }
+                    if(TimerDone(m_Timer) && m_WitchWasLookingLastFrame)
+                    {
+                        m_Witch->TurnAround();
+                        SetTimer(m_Timer, (float)GetRandomValue(3, 10));
+                        m_WitchWasLookingLastFrame = false;
+                        m_AnimationFrameCounter = 0;
+                    }
+                    else if(TimerDone(m_Timer) && !m_WitchWasLookingLastFrame)
+                    {
+                        ++m_AnimationFrameCounter;
+                        if(m_AnimationFrameCounter == 16)
+                            m_WitchWasLookingLastFrame = true;
+                    }
 
-                if(m_Player->IsTop() && m_CurrentStage < 2)
-                {
-                    m_Window->StageUp();
-                    m_Player->SetTop(false);
-                    ++m_CurrentStage;
-                    m_Player->SetPosition(m_Player->GetPosition().x, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
+                    if(m_Player->IsTop() && m_CurrentStage < 2)
+                    {
+                        m_Window->StageUp();
+                        m_Player->SetTop(false);
+                        ++m_CurrentStage;
+                        m_Player->SetPosition(m_Player->GetPosition().x, CELL_SIZE*CELL_COUNT_HEIGHT - 80);
 
-                }
-                if(m_Player->IsBottom() && m_CurrentStage > 0)
-                {
-                    m_Window->StageDown();
-                    m_Player->SetBottom(false);
-                    --m_CurrentStage;
-                    m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
-                };
-                if (m_Player->Update(m_Witch->CheckState())) { PlayMoveSound(); }
+                    }
+                    if(m_Player->IsBottom() && m_CurrentStage > 0)
+                    {
+                        m_Window->StageDown();
+                        m_Player->SetBottom(false);
+                        --m_CurrentStage;
+                        m_Player->SetPosition(m_Player->GetPosition().x, (19*CELL_SIZE));
+                    }
+                    if (m_Player->Update(m_Witch->CheckState())) { PlayMoveSound(); }
                     bool player_touches_candy = {
-                        m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x - 2*CELL_SIZE &&
-                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 8*CELL_SIZE &&
-                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 8*CELL_SIZE &&
-                        m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y + 2*CELL_SIZE
+                        m_Player->GetPosition().x >= m_CandiesPositions[m_CurrentStage].x - 2 * CELL_SIZE &&
+                        m_Player->GetPosition().x <= m_CandiesPositions[m_CurrentStage].x + 8 * CELL_SIZE &&
+                        m_Player->GetPosition().y >= m_CandiesPositions[m_CurrentStage].y - 8 * CELL_SIZE &&
+                        m_Player->GetPosition().y <= m_CandiesPositions[m_CurrentStage].y + 2 * CELL_SIZE
                     };
                     if(player_touches_candy && !m_PickedCandies.contains(m_Candies[m_CurrentStage]))
                     {
@@ -194,22 +199,33 @@ void Game::Run()
 
                     if(!m_PickedCandies.contains(m_Candies[m_CurrentStage]))
                         m_Candies[m_CurrentStage]->Draw();
+#ifdef NJ_DEBUG
                     DrawText(TextFormat("Current Stage: %i", m_CurrentStage), 120, 300, 25, DARK_COLORS[currentColorScheme]);
+#endif
 
-
-
-        }
-        else
-        {
-            m_CurrState = GAME_STATE::LOSE;
-        }
+                    if (m_CurrentStage == 2)
+                    {
+                        if(m_Witch->CheckState() == true)
+                        {
+                            DrawTextureEx(witchTextureFront, Vector2(21 * CELL_SIZE, 21 * CELL_SIZE), 0, CELL_SIZE, WHITE);
+                        }
+                        else
+                        {
+                            DrawTextureEx(witchTextureBack, Vector2( 21 * CELL_SIZE, 21 * CELL_SIZE ), 0, CELL_SIZE, WHITE);
+                        }
+                    }
+                }
+                else
+                {
+                    m_CurrState = GAME_STATE::LOSE;
+                }
         break;
         case GAME_STATE::LOSE:
             DrawTextureEx(loseTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
             if (IsKeyPressed(KEY_R))
             {
-                m_CurrState = GAME_STATE::GAME;
                 Reset();
+                m_CurrState = GAME_STATE::GAME;
             }
             if (IsKeyPressed(KEY_M))
                 m_CurrState = GAME_STATE::MENU;
@@ -218,8 +234,8 @@ void Game::Run()
         DrawTextureEx(winTexture, { 0, 0 }, 0, CELL_SIZE, WHITE);
             if (IsKeyPressed(KEY_R))
             {
-                m_CurrState = GAME_STATE::GAME;
                 Reset();
+                m_CurrState = GAME_STATE::GAME;
             }
             if(IsKeyPressed(KEY_M))
                 m_CurrState = GAME_STATE::MENU;

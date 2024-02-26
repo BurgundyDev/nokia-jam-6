@@ -27,6 +27,7 @@ public:
 
 private:
     void Setup();
+    void DrawDecorations();
 
     Window* m_Window;
     Player* m_Player;
