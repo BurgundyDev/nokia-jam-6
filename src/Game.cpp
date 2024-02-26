@@ -189,7 +189,7 @@ void Game::Run()
                             PlaySound(m_pickupSound);
                     }
 
-                    if(m_PickedCandies.size() == 3 && m_Player->IsTop() && m_CurrentStage == 2)
+                    if(m_PickedCandies.size() == 3 && m_Player->IsBottom() && m_CurrentStage == 0)
                         m_CurrState = GAME_STATE::WIN;
 
                     UpdateTimer(m_Timer);
